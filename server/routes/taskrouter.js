@@ -17,10 +17,10 @@ router.get('/', (req, res) => {
             //sending back the rows
             res.send(dbResult.rows);
         })
-        .catch((dbErr) => {
-            console.error(dbErr);
+        .catch((dbError) => {
+            console.error(dbError);
             res.sendStatus(500);
-        })
+        });
 });
 
 //post route for tasks
@@ -31,13 +31,14 @@ router.post('/', (req, res) => {
     const sqlText = 'INSERT INTO "tasks"("task",) VALUES ($1);';
     //sql string tapping the db
     pool.query (sqlText, [newTask.task])
-        .then(result => {
+        .then((dbResult) => {
+            console.log(dbResult);
             res.sendStatus(201);
         })
-        .catch(error => {
-            console.log ('Error adding new task', error);
+        .catch((dbError) => {
+            console.log ('Error adding new task', dbError);
             res.sendStatus(500);
-        })
+        });
 }); 
 
 //put route for completing task
@@ -47,23 +48,30 @@ router.put('/:id', (req, res) => {
     const sqlText =  'UPDATE "tasks" SET "complete" = true WHERE "id" = $1;';
     console.log('PUT /tasks');
     pool.query(sqlText, [taskId])
-    .then(result => {
+    .then((dbResult) => {
+        console.log(dbResult);
         res.sendStatus(201);
     })
-    .catch(error => {
+    .catch((dbError) => {
+        console.log(dbError);
         res.sendStatus(500);
-    })
+    });
 });
 
+//delete route
 router.delete('/:id', (req, res) => {
     console.log('DELETE /tasks');
     let taskId = req.params.id;
     let sqlText = 'DELETE FROM "tasks" WHERE "id" = $1;';
     pool.query(sqlText, [taskId])
-    .then(result => {
+    .then((dbResult) => {
+        console.log(dbResult);
         res.sendStatus(201);
     })
-    .catch(error => {
+    .catch((dbError) => {
+        console.log(dbError);
         res.sendStatus(500);
-    })
+    });
 });
+
+module.exports = router;
