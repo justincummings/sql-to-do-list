@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const pool = require('../modules/pool');
+const pool = require('../modules/pool.js');
 
 
 //get route for tasks
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
         .catch((dbErr) => {
             console.error(dbErr);
             res.sendStatus(500);
-        });
+        })
 });
 
 //post route for tasks
@@ -35,7 +35,35 @@ router.post('/', (req, res) => {
             res.sendStatus(201);
         })
         .catch(error => {
-            console.log (`Error adding new task`, error);
+            console.log ('Error adding new task', error);
             res.sendStatus(500);
-        });
+        })
 }); 
+
+//put route for completing task
+router.put('/:id', (req, res) => {
+    console.log('PUT /tasks');
+    const taskId = req.params.id;
+    const sqlText =  'UPDATE "tasks" SET "complete" = true WHERE "id" = $1;';
+    console.log('PUT /tasks');
+    pool.query(sqlText, [taskId])
+    .then(result => {
+        res.sendStatus(201);
+    })
+    .catch(error => {
+        res.sendStatus(500);
+    })
+});
+
+router.delete('/:id', (req, res) => {
+    console.log('DELETE /tasks');
+    let taskId = req.params.id;
+    let sqlText = 'DELETE FROM "tasks" WHERE "id" = $1;';
+    pool.query(sqlText, [taskId])
+    .then(result => {
+        res.sendStatus(201);
+    })
+    .catch(error => {
+        res.sendStatus(500);
+    })
+});
