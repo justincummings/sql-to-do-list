@@ -1,8 +1,6 @@
 const express = require('express');
 
-const pool = require('./modules/pool');
-
-const tasksRouter = require('./routes/tasks.router');
+const tasksRouter = require('./routes/taskrouter.js');
 
 const app = express();
 
@@ -18,4 +16,4 @@ app.use('/tasks', tasksRouter);
 
 app.listen(PORT, () => {
   console.log("I'm listening", PORT);
-});
+})

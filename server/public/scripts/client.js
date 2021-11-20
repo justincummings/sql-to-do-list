@@ -3,12 +3,7 @@ $(document).ready(readyOn);
 function readyOn() {
     console.log("DOM is loaded");
     renderTasks();
-// Event Listener for task submit button
-    $('form').submit('#submit-task', submitTask);
-// Event Listener for task complete button
-    $('#task-table-body').on('click', '.completion-submit', completeTask);
-// Event listener for delete button
-    $('#task-table-body').on('click', '.delete-button', deleteTask);
+    $('#submitTask').on('click', addTask);
 }
 
 function renderTasks() {
@@ -24,8 +19,29 @@ function renderTasks() {
                 <td>${task.task}</td>
                 <td>${task.status}</td>
                 <td><button class="deleteBtn" data-id="${task.id}">Delete</button>
-                <td><button class="doneBtn" data-id="${task.id}" data-read="${task.isRead}"">Done</button>
-            `)
+                <td><button class="doneBtn" data-id="${task.id}" data-status="${task.status}">Complete</button>
+            <tr>
+            `);
         }
     })
+}
+
+function addTask() {
+    console.log('in addTask');
+    const newTask = {
+    task: $('#taskInput').val(),
+    };
+    $.ajax({
+      type: 'POST',
+      url: '/tasks',
+      data: newTask
+    }).then((response) => {
+        console.log('POST /tasks succeeded')
+        $('#taskInput').val('');
+        renderTasks();
+    })
+    .catch((err) => {
+        console.log('error: ', err);
+        alert('Something went wrong.');
+    });
 }

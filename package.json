@@ -1,5 +1,25 @@
 {
   "dependencies": {
-    "node": "^17.1.0"
-  }
+    "express": "^4.17.1",
+    "pg": "^8.7.1"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "sql-to-do-list",
+  "description": "[Project Instructions](./INSTRUCTIONS.md), this line may be removed once you have updated the README.md",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justincummings/sql-to-do-list.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/justincummings/sql-to-do-list/issues"
+  },
+  "homepage": "https://github.com/justincummings/sql-to-do-list#readme"
 }
