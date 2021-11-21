@@ -19,9 +19,9 @@ function renderTasks() {
             $('#taskTable').append(`
             <tr>
                 <td>${task.task}</td>
-                <td>${task.taskStatus}</td>
+                <td>${task.status}</td>
                 <td><button class="deleteBtn" data-id="${task.id}">Delete</button>
-                <td><button class="doneBtn" data-id="${task.id}" data-taskStatus="${task.taskStatus}">Done</button>
+                <td><button class="doneBtn" data-id="${task.id}" data-status="${task.status}">Done</button>
             <tr>
             `);
         }
