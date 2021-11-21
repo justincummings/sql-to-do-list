@@ -1,8 +1,10 @@
+const pool = require('../modules/pool.js');
+
 const express = require('express');
 
 const router = express.Router();
 
-const pool = require('../modules/pool.js');
+
 
 
 //get route for tasks
@@ -13,7 +15,7 @@ router.get('/', (req, res) => {
     //tapping the db for data
     pool.query(sqlText)
         .then((dbResult) => {
-            console.log(`${dbResult.rows} rows to send`)
+            console.log(`${dbResult.rows} rows to send`);
             //sending back the rows
             res.send(dbResult.rows);
         })
