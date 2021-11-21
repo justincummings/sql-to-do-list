@@ -4,7 +4,7 @@ function readyOn() {
     console.log("DOM is loaded");
     renderTasks();
     $('#submitTask').on('click', addTask);
-    $('#taskTable').on('click', '.doneBtn', taskComplete);
+    $('#taskTable').on('click', '.doneBtn', completeTask);
     $('#taskTable').on('click', '.deleteBtn', deleteTask);
 }
 
@@ -31,6 +31,7 @@ function renderTasks() {
 function addTask() {
     const newTask = {
     task: $('#task-in').val(),
+    taskStatus: false
     }
     $.ajax({
     type: 'POST',
@@ -43,23 +44,21 @@ function addTask() {
     });
 }
 
-
-function taskComplete() {
-    console.log('in taskComplete');
-    const taskIdtoComplete = $(this).data('id');
-    const taskComplete = $(this).data('complete'); //possible issue with complete?
-    console.log('taskIdtoComplete', taskIdtoComplete);
-    console.log('taskComplete', taskComplete);
-    $.ajax({  //console throws error here
-        type: 'PUT',
-        url: `/tasks/${taskIdtoComplete}`,
-        data: {taskStatus: taskComplete}
-    }).then((res) => {
-        refreshTasks();
-    }).catch((err) => {
-        console.log(error);
+function completeTask() {
+    let taskId = $(this).data('id');
+    $.ajax({
+    method: 'PUT',
+    url: `/tasks/complete/${taskId}`,
+    })
+    .then((response) => {
+    renderTasks();
+    })
+    .catch((err) => {
+        console.log('Completion Error: ', err);
+        alert('Something went wrong..', err);
     });
-};
+}
+
 
 function refreshTasks() {
     $.ajax({

@@ -50,22 +50,17 @@ router.post('/', (req, res) => {
 });
 
 
-
-//put route for completing task
-router.put('/:id', (req, res) => {
-    console.log('PUT /tasks');
-    const taskIdtoUpdate = req.params.id;
-    const taskIsTrue = req.body.isTrue;
-    console.log(taskIsTrue);
-    const sqlText =  'UPDATE "tasks" SET "taskStatus" = $1 WHERE "id" = $2;';
-    const sqlValues = ['true', taskIdtoUpdate]
-    pool.query(sqlText, sqlValues)
-    .then((dbResult) => {
-        console.log(dbResult);
+router.put('/complete/:id', (req, res) => {
+    let taskId = req.params.id;
+    let sqlTxt = `
+    UPDATE "tasks" SET "status" = true WHERE "id" = $1;
+    `;
+    pool.query(sqlTxt, [taskId])
+    .then((resDb) => {
         res.sendStatus(200);
     })
-    .catch((dbError) => {
-        console.log(dbError);
+    .catch((err) => {
+        console.log(err);
         res.sendStatus(500);
     });
 });
