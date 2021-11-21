@@ -4,6 +4,7 @@ function readyOn() {
     console.log("DOM is loaded");
     renderTasks();
     $('#submitTask').on('click', addTask);
+    $('#taskTable').on('click', '.deleteBtn', deleteTask);
 }
 
 function renderTasks() {
@@ -27,21 +28,27 @@ function renderTasks() {
 }
 
 function addTask() {
-    console.log('in addTask');
     const newTask = {
-    task: $('#taskInput').val(),
-    };
+      task: $('#task-in').val(),
+    }
     $.ajax({
       type: 'POST',
       url: '/tasks',
       data: newTask
     }).then((response) => {
-        console.log('POST /tasks succeeded')
-        $('#taskInput').val('');
-        renderTasks();
-    })
-    .catch((err) => {
-        console.log('error: ', err);
-        alert('Something went wrong.');
+      console.log('POST /tasks succeeded')
+      $('#task-in').val(''),
+      renderTasks();
     });
 }
+
+function deleteTask() {
+    const taskIdToDelete = $(this).data('id');
+    $.ajax({
+      type: 'DELETE',
+      url: `/tasks/${taskIdToDelete}`
+    }).then((response) => {
+      console.log(response);
+      renderTasks();
+    })
+  };

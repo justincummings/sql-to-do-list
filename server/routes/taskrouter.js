@@ -25,50 +25,60 @@ router.get('/', (req, res) => {
         });
 });
 
-//post route for tasks
 router.post('/', (req, res) => {
     console.log('POST /tasks');
     console.log('req.body:', req.body);
     const newTask = req.body;
-    const sqlText = 'INSERT INTO "tasks"("task",) VALUES ($1);';
-    //sql string tapping the db
-    pool.query (sqlText, [newTask.task])
-        .then((dbResult) => {
-            console.log(dbResult);
-            res.sendStatus(201);
-        })
-        .catch((dbError) => {
-            console.log ('Error adding new task', dbError);
-            res.sendStatus(500);
-        });
-}); 
-
-//put route for completing task
-router.put('/:id', (req, res) => {
-    console.log('PUT /tasks');
-    const taskId = req.params.id;
-    const sqlText =  'UPDATE "tasks" SET "complete" = true WHERE "id" = $1;';
-    console.log('PUT /tasks');
-    pool.query(sqlText, [taskId])
+    const sqlText = `
+    INSERT INTO "tasks"
+        ("task")
+    VALUES
+        ($1);
+    `;
+    const sqlValues = [
+    newTask.task,
+    ];
+    pool.query(sqlText, sqlValues)
     .then((dbResult) => {
-        console.log(dbResult);
+        console.log('INSERT succeeded.');
         res.sendStatus(201);
     })
-    .catch((dbError) => {
-        console.log(dbError);
+    .catch((dbErr) => {
+        console.error(dbErr);
         res.sendStatus(500);
     });
 });
 
+
+
+//put route for completing task
+// router.put('/:id', (req, res) => {
+//     console.log('PUT /tasks');
+//     const taskIdtoUpdate = req.params.id;
+    
+//     const sqlText =  'UPDATE "tasks" SET "complete" = true WHERE "id" = $1;';
+//     console.log('PUT /tasks');
+//     pool.query(sqlText, [taskId])
+//     .then((dbResult) => {
+//         console.log(dbResult);
+//         res.sendStatus(201);
+//     })
+//     .catch((dbError) => {
+//         console.log(dbError);
+//         res.sendStatus(500);
+//     });
+// });
+
 //delete route
 router.delete('/:id', (req, res) => {
     console.log('DELETE /tasks');
-    let taskId = req.params.id;
-    let sqlText = 'DELETE FROM "tasks" WHERE "id" = $1;';
-    pool.query(sqlText, [taskId])
+    const taskIdtoDelete = req.params.id;
+    const sqlText = 'DELETE FROM "tasks" WHERE "id" = $1;';
+    const sqlValues = [taskIdtoDelete];
+    pool.query(sqlText, sqlValues)
     .then((dbResult) => {
         console.log(dbResult);
-        res.sendStatus(201);
+        res.sendStatus(200);
     })
     .catch((dbError) => {
         console.log(dbError);
