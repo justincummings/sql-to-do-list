@@ -4,8 +4,9 @@ function readyOn() {
     console.log("DOM is loaded");
     renderTasks();
     $('#submitTask').on('click', addTask);
-    $('#taskTable').on('click', '.doneBtn', completeTask);
-    $('#taskTable').on('click', '.deleteBtn', deleteTask);
+    $('#toDoTable').on('click', '.doneBtn', completeTask);
+    $('#toDoTable').on('click', '.deleteBtn', deleteTask);
+    $('#completeTable').on('click', '.deleteBtn', deleteTask);
 }
 
 function renderTasks() {
@@ -13,17 +14,29 @@ function renderTasks() {
         type: 'GET',
         url:'/tasks'
     }).then((response) => {
-        $("#taskTable").empty();
+        $("#completeTable").empty();
+        $("#toDoTable").empty();
         console.log("GET /task response", response);
         for (let task of response) {
-            $('#taskTable').append(`
+            const taskId = task.id;
+            if (task.status === true) {
+                $('#completeTable').append(`
+                <tr>
+                    <td id="${taskId}">${task.task}</td>
+                    <td><button class="deleteBtn" data-id="${task.id}">Delete</button>
+                </tr>
+                `);
+                $(`#${taskId}`).addClass('taskDone');
+            }
+            else {
+            $('#toDoTable').append(`
             <tr>
                 <td>${task.task}</td>
-                <td>${task.status}</td>
                 <td><button class="deleteBtn" data-id="${task.id}">Delete</button>
-                <td><button class="doneBtn" data-id="${task.id}" data-status="${task.status}">Done</button>
-            <tr>
+                <td><button class="doneBtn" data-id="${task.id}" data-status="${task.status}">Complete</button>
+            </tr>
             `);
+            }
         }
     })
 }
